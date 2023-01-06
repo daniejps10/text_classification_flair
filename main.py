@@ -6,12 +6,27 @@
 from flair.models import TextClassifier
 from flair.data import Sentence
 
-classifier = TextClassifier.load('en-sentiment')
+import constants
+import pandas as pd
 
-sentence = Sentence('Flair is pretty neat!')
-classifier.predict(sentence)
+#Read data
+print(constants.LINE)
+print(constants.SUB_LINE)
+print('Read SPAM file...')
+data = pd.read_csv("spam.csv", encoding='latin-1').sample(frac=1).drop_duplicates()
+print(data.head())
 
-#Print sentence with predicted labels
-print('Sentence above is: ', sentence.labels)
+#Rename columns
+print(constants.SUB_LINE)
+print('Rename columns...')
+data = data[['v1', 'v2']].rename(columns={"v1":"label", "v2":"text"})
+data['label'] = '__label__' + data['label'].astype(str)
+print(data.head())
 
+#Split into train, test, dev data
+print(constants.SUB_LINE)
+print('Split into train, test, dev data...')
+data.iloc[0:int(len(data)*0.8)].to_csv('train.csv', sep='\t', index = False, header = False)
+data.iloc[int(len(data)*0.8):int(len(data)*0.9)].to_csv('test.csv', sep='\t', index = False, header = False)
+data.iloc[int(len(data)*0.9):].to_csv('dev.csv', sep='\t', index = False, header = False)
 
