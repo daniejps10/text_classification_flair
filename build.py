@@ -28,15 +28,18 @@ data_df = data_df[['clean_tweet','labels']]
 #Rename columns
 print(constants.SUB_LINE)
 print('Rename columns...')
-data_df = data_df.rename(columns={"clean_tweet":"text"})
-#data['label'] = '__label__' + data['label'].astype(str)
+data_df = data_df.rename(columns={"clean_tweet":"text", "labels":"label"})
+data_df['label'] = '__label__' + data_df['label'].astype(str)
 print(data_df.head())
 
 #Split into train, test, dev data
 print(constants.SUB_LINE)
 print('Split into train, test, dev data...')
-train_df,test_df, dev_df = np.split(data_df,[int(.6*len(data_df)),int(.8*len(data_df))])
+train_df, test_df, dev_df = np.split(data_df,[int(.6*len(data_df)),int(.8*len(data_df))])
 print(data_df.shape)
 print(train_df.shape)
 print(test_df.shape)
 print(dev_df.shape)
+train_df.to_csv(constants.INPUT_FOLDER_FILE.format('train.csv'))
+test_df.to_csv(constants.INPUT_FOLDER_FILE.format('test.csv'))
+dev_df.to_csv(constants.INPUT_FOLDER_FILE.format('dev.csv'))
