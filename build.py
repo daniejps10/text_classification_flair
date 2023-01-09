@@ -20,6 +20,18 @@ print(data_df['class'].value_counts())
 print('Show columns...')
 print(data_df.columns)
 
+# Strip: object column data
+print(constants.SUB_LINE)
+print('Strip: object columns dataframe...')
+data_df = data_df.select_dtypes(['object'])
+data_df[data_df.columns] = data_df.apply(lambda x: x.str.strip())
+
+# Remove null data
+print(constants.SUB_LINE)
+print('Remove null data...')
+data_df['clean_tweet'].replace('', np.nan, inplace=True)
+data_df.dropna(subset=['clean_tweet'], inplace=True)
+
 # Select two columns: clean_tweet, labels
 print(constants.SUB_LINE)
 print('Selecting two columns...')
@@ -29,7 +41,7 @@ data_df = data_df[['clean_tweet','labels']]
 print(constants.SUB_LINE)
 print('Rename columns...')
 data_df = data_df.rename(columns={"clean_tweet":"text", "labels":"label"})
-data_df['label'] = '__label__' + data_df['label'].astype(str)
+#data_df['label'] = '__label__' + data_df['label'].astype(str)
 print(data_df.head())
 
 #Split into train, test, dev data
